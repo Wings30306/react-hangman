@@ -57,6 +57,7 @@ class Hangman extends Component {
       }))
   }
 
+
   /** generateButtons: return array of letter buttons to render */
   generateButtons() {
     return "abcdefghijklmnopqrstuvwxyz".split("").map((ltr) => (
@@ -73,17 +74,19 @@ class Hangman extends Component {
 
 
   render() {
+    const isWinner = this.guessedWord().join("") === this.state.answer;
+    const gameOver = this.state.nWrong >= this.props.maxWrong
     return (
       <div className='Hangman'>
         <h1>Hangman</h1>
         <p>You have {this.state.nWrong} wrong guess{this.state.nWrong !== 1 &&"es"}!</p>
         <img src={this.props.images[this.state.nWrong]} alt={`You have guessed ${this.state.nWrong} letters wrong!`}/>
         <p className='Hangman-word'>{this.guessedWord()}</p>
-        {this.state.nWrong >= this.props.maxWrong
-        ? <h2>Sorry, You Lose! The word we were looking for was {this.state.answer}</h2>
-        : <p className='Hangman-btns'>{this.generateButtons()}</p>
-        }
-        <button onClick={this.restart}>RESTART</button>
+        {isWinner && <h2>You Win!</h2>}
+        {gameOver && <h2>Sorry, You Lose! The word we were looking for was {this.state.answer}</h2>}
+        {!isWinner && !gameOver && <p className='Hangman-btns'>{this.generateButtons()}</p>}
+        
+        <button id="Hangman-restart" onClick={this.restart}>RESTART</button>
         
       </div>
     );
